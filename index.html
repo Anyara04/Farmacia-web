@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farmacia Alameda · Medicamentos explicados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F7F5F0;--surface:#FFFFFF;--ink:#1C2A2B;--muted:#5B6B6C;--petrol:#17454A;--petrol-soft:#E3ECEB;--accent:#C4472F;--line:#DDD8CC;
+--serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121B1C;--surface:#1A2627;--ink:#EDEAE2;--muted:#9DB0B0;--petrol:#8FC3BE;--petrol-soft:#223536;--accent:#F08A72;--line:#2D3E3F}}
+:root[data-theme="dark"]{--bg:#121B1C;--surface:#1A2627;--ink:#EDEAE2;--muted:#9DB0B0;--petrol:#8FC3BE;--petrol-soft:#223536;--accent:#F08A72;--line:#2D3E3F}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--sans)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:22px 0;flex-wrap:wrap}
+.brand{font:600 22px var(--serif);color:var(--petrol);text-decoration:none}
+nav a{margin-left:20px;text-decoration:none;color:var(--muted);font-weight:500}
+nav a:hover{color:var(--ink)}
+.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:56px;padding:48px 0 64px;align-items:end}
+h1{font:400 clamp(34px,6vw,58px)/1.08 var(--serif);color:var(--petrol);margin:0 0 24px;letter-spacing:-.015em}
+h2{font:400 clamp(26px,4vw,36px)/1.15 var(--serif);color:var(--petrol);margin:0 0 16px}
+.search{position:relative}
+.search input{width:100%;font:inherit;font-size:19px;padding:18px 20px;border:1.5px solid var(--petrol);border-radius:10px;background:var(--surface);color:var(--ink)}
+.search input::placeholder{color:var(--muted)}
+#sug{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:10px;list-style:none;margin:0;padding:6px;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.07)}
+#sug[hidden]{display:none}
+#sug button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;font:inherit;background:none;border:0;padding:12px;border-radius:6px;cursor:pointer;color:var(--ink)}
+#sug button:hover,#sug button:focus-visible{background:var(--petrol-soft)}
+#sug small{color:var(--muted)}
+.hint{color:var(--muted);margin:14px 0 0;font-size:16px}
+.today{border-left:3px solid var(--accent);padding:4px 0 4px 22px}
+.today p{margin:0 0 10px}
+.today strong{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--petrol)}
+section{padding:48px 0;border-top:1px solid var(--line)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 28px}
+.chip{font:inherit;font-size:15px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--petrol);color:var(--bg);border-color:var(--petrol)}
+select{font:inherit;font-size:15px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.sep{width:1px;height:26px;background:var(--line);margin:0 6px}
+.list{list-style:none;margin:0;padding:0}
+.row{display:grid;grid-template-columns:76px 1fr auto;gap:20px;align-items:center;width:100%;text-align:left;font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:18px 4px;cursor:pointer}
+.row:hover{background:var(--petrol-soft)}
+.row svg{width:76px;height:76px}
+.row h3{font:600 20px var(--serif);margin:0;color:var(--petrol)}
+.row p{margin:2px 0 0;color:var(--muted);font-size:16px}
+.meta{text-align:right;font-size:15px}
+.meta b{display:block;font-size:18px;font-weight:600}
+.tag{display:inline-block;font-size:14px;font-weight:600;padding:2px 10px;border-radius:6px;margin-top:4px}
+.tag.otc{background:var(--petrol-soft);color:var(--petrol)}
+.tag.rx{border:1.5px solid var(--accent);color:var(--accent)}
+.empty{padding:32px 0;color:var(--muted)}
+dialog{border:0;border-radius:14px;padding:0;max-width:640px;width:calc(100% - 28px);background:var(--surface);color:var(--ink);max-height:92vh}
+dialog::backdrop{background:rgba(10,20,20,.5)}
+.sheet{padding:28px 28px 24px}
+.sheet-head{display:grid;grid-template-columns:110px 1fr;gap:20px;align-items:center;margin-bottom:18px}
+.sheet-head svg{width:110px;height:110px}
+.sheet h2{margin:0 0 4px}
+.sheet dl{margin:0}
+.sheet dt{font:600 18px var(--serif);color:var(--petrol);margin:20px 0 4px}
+.sheet dd{margin:0}
+.close{float:right;font:inherit;background:none;border:1px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--ink)}
+.buy{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:24px;padding-top:18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{font:600 17px var(--sans);background:var(--accent);color:#fff;border:0;border-radius:10px;padding:14px 22px;cursor:pointer;text-decoration:none;display:inline-block}
+:root[data-theme="dark"] .btn{color:#1a1010}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#1a1010}}
+.note{font-size:14.5px;color:var(--muted);margin-top:18px}
+.cartbtn{font:600 15px var(--sans);margin-left:20px;background:var(--petrol);color:var(--bg);border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+.cartbtn span{display:inline-block;min-width:22px;margin-left:6px;background:var(--bg);color:var(--petrol);border-radius:999px;text-align:center;font-size:13px;padding:0 6px}
+.citem{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.muted{color:var(--muted);font-size:15px}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ink);font:600 18px var(--sans);cursor:pointer}
+.tot{display:flex;justify-content:space-between;font-size:20px;margin:16px 0}
+#oform [hidden]{display:none}
+#oform label,#oform legend{display:block;font-weight:500;margin-top:14px;padding:0}
+#oform input:not([type=radio]){display:block;width:100%;font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);margin-top:4px}
+#oform fieldset{border:0;padding:0;margin:0 0 6px}
+#oform fieldset label{display:flex;gap:10px;align-items:center;font-weight:400;margin-top:8px}
+#oform .btn{margin-top:22px;width:100%}
+.rxnote{border-left:3px solid var(--accent);padding-left:14px;color:var(--ink)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.cols p{max-width:60ch;margin:0 0 14px}
+footer{padding:32px 0 48px;color:var(--muted);font-size:15px;border-top:1px solid var(--line)}
+@media (max-width:760px){.hero,.cols{grid-template-columns:1fr;gap:32px}.hero{padding:24px 0 40px}.row{grid-template-columns:60px 1fr;gap:14px}.row svg{width:60px;height:60px}.meta{grid-column:2;text-align:left}nav a{margin:0 16px 0 0}.sheet-head{grid-template-columns:80px 1fr}.sheet-head svg{width:80px;height:80px}.sep{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="#">Farmacia Alameda</a>
+  <nav aria-label="Principal"><a href="#catalogo">Catálogo</a><a href="#nosotros">Sobre nosotros</a><a href="#contacto">Contacto</a><button class="cartbtn" id="cartbtn">Mi pedido<span id="cnt">0</span></button></nav>
+</header>
+
+<main>
+<div class="hero">
+  <div>
+    <h1>Antes de comprarlo, entiende para qué sirve.</h1>
+    <div class="search">
+      <label for="q" class="hint" style="margin:0 0 8px;display:block">Busca por nombre o por lo que sientes</label>
+      <input id="q" type="search" placeholder="Ej. dolor de cabeza, ibuprofeno, alergia" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug">
+      <ul id="sug" role="listbox" hidden></ul>
+    </div>
+    <p class="hint">Cada medicamento tiene su ficha con usos, cómo tomarlo y advertencias.</p>
+  </div>
+  <aside class="today" aria-label="Datos de la farmacia">
+    <p><strong>Horario</strong><br>Lunes a sábado, de 8:00 a. m. a 8:00 p. m.</p>
+    <p>Llámanos al <a href="tel:+18095508839">809-550-8839</a><br>o escríbenos por WhatsApp.</p>
+    <p>San Carlos, Calle N/9, La Romana</p>
+  </aside>
+</div>
+
+<section id="catalogo" aria-labelledby="t-cat">
+  <h2 id="t-cat">Catálogo</h2>
+  <div class="filters" id="filters" role="group" aria-label="Filtros"></div>
+  <div class="list" id="list" aria-live="polite"></div>
+</section>
+
+<section id="nosotros" aria-labelledby="t-nos">
+  <div class="cols">
+    <div><h2 id="t-nos">Sobre nosotros</h2></div>
+    <div>
+      <p>Somos una farmacia de barrio con farmacéuticos titulados en mostrador. Si dudas entre dos productos, pregúntanos: preferimos explicarte que venderte de más.</p>
+      <p>Las fichas de este sitio resumen los prospectos oficiales en lenguaje cotidiano. No reemplazan la consulta con tu médico o farmacéutico.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contacto" aria-labelledby="t-con">
+  <div class="cols">
+    <div><h2 id="t-con">Contacto y ubicación</h2></div>
+    <div>
+      <p><strong>Dirección:</strong> San Carlos, Calle N/9, La Romana<br><strong>Teléfono:</strong> <a href="tel:+18095508839">809-550-8839</a><br><strong>Horario:</strong> lunes a sábado, de 8:00 a. m. a 8:00 p. m.</p>
+      <p>Para medicamentos con receta, trae la receta original o envíanos una foto legible por WhatsApp.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+</div>
+
+<dialog id="dlg" aria-labelledby="d-name"><div class="sheet" id="sheet"></div></dialog>
+<dialog id="cdlg" aria-labelledby="c-title"><div class="sheet" id="cart"></div></dialog>
+
+<script>
+const P=[
+{id:1,n:"Paracetamol",s:"Paracetamol",pa:"Paracetamol",d:"500 mg",pres:"Caja de 20 tabletas",cat:"Dolor y fiebre",marca:"Genérico",rx:0,pr:180,c:"#17454A",
+ uso:"Baja la fiebre y alivia el dolor leve a moderado, como el dolor de cabeza, muscular o de muelas.",
+ como:"Se toma por vía oral con un vaso de agua. Respeta el tiempo mínimo entre tomas y la dosis máxima diaria que indica el prospecto.",
+ adv:"No lo combines con otros productos que también contengan paracetamol. Consulta antes de usarlo si tienes enfermedad del hígado o tomas alcohol con frecuencia."},
+{id:2,n:"Ibuprofeno",s:"Ibuprofeno",pa:"Ibuprofeno",d:"400 mg",pres:"Caja de 20 tabletas",cat:"Dolor y fiebre",marca:"Genérico",rx:0,pr:260,c:"#3C6E71",
+ uso:"Alivia el dolor, baja la inflamación y la fiebre. Se usa en dolor de espalda, cólicos menstruales y golpes.",
+ como:"Tómalo con alimentos para cuidar el estómago. Usa la menor cantidad posible durante el menor tiempo posible, como indica el prospecto.",
+ adv:"No lo uses si tienes úlcera o sangrado de estómago, ni en el embarazo avanzado. Consulta antes si tienes asma, problemas del riñón o del corazón."},
+{id:3,n:"Loratadina",s:"Loratadina",pa:"Loratadina",d:"10 mg",pres:"Caja de 10 tabletas",cat:"Alergias",marca:"Genérico",rx:0,pr:150,c:"#7A6A3F",
+ uso:"Calma los síntomas de la alergia: estornudos, picazón de nariz u ojos, secreción y ronchas en la piel.",
+ como:"Normalmente se toma una vez al día, con o sin comida. Sigue las indicaciones del prospecto de tu presentación.",
+ adv:"Consulta con tu médico si estás embarazada, das de lactar o tienes enfermedad del hígado. Es poco probable que dé sueño, pero ten precaución si lo notas."},
+{id:4,n:"Omeprazol",s:"Omeprazol",pa:"Omeprazol",d:"20 mg",pres:"Caja de 14 cápsulas",cat:"Digestivo",marca:"Genérico",rx:0,pr:320,c:"#8A4B3A",
+ uso:"Reduce el ácido del estómago. Se usa para la acidez frecuente y el reflujo.",
+ como:"Suele tomarse en ayunas, antes del desayuno, con agua. Traga la cápsula entera.",
+ adv:"Si necesitas tomarlo por más de unas semanas, consulta a tu médico. Avisa si tienes dificultad para tragar, vómitos con sangre o pérdida de peso sin causa."},
+{id:5,n:"Suero oral",s:"Suero oral",pa:"Sales de rehidratación oral",d:"Sobres",pres:"Caja de 5 sobres",cat:"Hidratación",marca:"Hidralyte",rx:0,pr:210,c:"#2E6F8E",
+ uso:"Repone agua y sales que se pierden con la diarrea, el vómito o la fiebre alta. Es útil en niños y adultos.",
+ como:"Disuelve cada sobre en la cantidad exacta de agua potable que indica el empaque. No añadas más agua ni azúcar. Ofrece sorbos pequeños y frecuentes.",
+ adv:"Si hay vómitos que no paran, sangre en las heces, sueño excesivo o signos de deshidratación en un bebé, acude al médico."},
+{id:6,n:"Amoxicilina",s:"Amoxicilina",pa:"Amoxicilina",d:"500 mg",pres:"Caja de 21 cápsulas",cat:"Infecciones",marca:"Genérico",rx:1,pr:540,c:"#5A4E7C",
+ uso:"Antibiótico para infecciones causadas por bacterias, por ejemplo de garganta, oído, vías urinarias o pulmones. No sirve para gripe ni resfriado.",
+ como:"Toma exactamente lo que indicó tu médico y termina todo el tratamiento, aunque te sientas mejor.",
+ adv:"No la uses si eres alérgico a la penicilina. Suspende y consulta si aparecen ronchas, hinchazón de cara o dificultad para respirar."},
+{id:7,n:"Salbutamol",s:"Salbutamol",pa:"Salbutamol",d:"100 mcg",pres:"Inhalador de 200 dosis",cat:"Respiratorio",marca:"Ventolín",rx:1,pr:690,c:"#2F5D8A",
+ uso:"Abre las vías respiratorias con rapidez. Alivia la falta de aire, la tos y el silbido del pecho en asma.",
+ como:"Se inhala con la técnica que te enseñó tu médico o farmacéutico. Agita el inhalador antes de usarlo. Pregúntanos si quieres repasar cómo hacerlo.",
+ adv:"Si lo necesitas con más frecuencia de lo normal o no te alivia, busca atención médica pronto. Puede causar temblor o palpitaciones."},
+{id:8,n:"Losartán",s:"Losartán",pa:"Losartán potásico",d:"50 mg",pres:"Caja de 30 tabletas",cat:"Corazón y presión",marca:"Genérico",rx:1,pr:420,c:"#6B3F55",
+ uso:"Baja la presión arterial alta y protege el corazón y los riñones.",
+ como:"Se toma una vez al día, a la misma hora, con o sin comida. No lo suspendas por tu cuenta aunque te sientas bien.",
+ adv:"No debe usarse en el embarazo. Consulta a tu médico si tomas suplementos de potasio, diuréticos o tienes enfermedad del riñón."}
+];
+const $=s=>document.querySelector(s);
+const money=n=>"RD$ "+n.toLocaleString("es-DO");
+const pack=p=>`<svg viewBox="0 0 120 120" aria-hidden="true"><rect x="20" y="24" width="80" height="74" rx="6" fill="${p.c}"/><rect x="20" y="24" width="80" height="18" rx="6" fill="#fff" opacity=".22"/><text x="60" y="72" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="12" fill="#fff">${p.s}</text><text x="60" y="88" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#fff" opacity=".85">${p.d}</text></svg>`;
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const st={cat:"Todos",rx:"todos",marca:"Todas",q:""};
+const cats=["Todos",...new Set(P.map(p=>p.cat))];
+const marcas=["Todas",...new Set(P.map(p=>p.marca))];
+function filters(){
+  $("#filters").innerHTML=cats.map(c=>`<button class="chip" aria-pressed="${st.cat===c}" data-cat="${c}">${c}</button>`).join("")+
+  `<span class="sep"></span>`+
+  [["todos","Todos"],["otc","Venta libre"],["rx","Con receta"]].map(([k,l])=>`<button class="chip" aria-pressed="${st.rx===k}" data-rx="${k}">${l}</button>`).join("")+
+  `<span class="sep"></span><label>Marca <select id="marca">${marcas.map(m=>`<option ${m===st.marca?"selected":""}>${m}</option>`).join("")}</select></label>`;
+}
+function match(p,q){const t=norm([p.n,p.pa,p.cat,p.uso].join(" "));return norm(q).split(/\s+/).filter(Boolean).every(w=>t.includes(w))}
+function list(){
+  const r=P.filter(p=>(st.cat==="Todos"||p.cat===st.cat)&&(st.rx==="todos"||(st.rx==="rx")===!!p.rx)&&(st.marca==="Todas"||p.marca===st.marca)&&match(p,st.q));
+  $("#list").innerHTML=r.length?r.map(p=>`<button class="row" data-id="${p.id}">${pack(p)}<div><h3>${p.n} ${p.d}</h3><p>${p.pres}. ${p.uso.split(". ")[0].replace(/\.$/,"")}.</p></div><div class="meta"><b>${money(p.pr)}</b><span class="tag ${p.rx?"rx":"otc"}">${p.rx?"Requiere receta médica":"Venta libre"}</span></div></button>`).join(""):`<p class="empty">No encontramos nada con esos filtros. Prueba con otra palabra o quita algún filtro, o llámanos y te ayudamos.</p>`;
+}
+function open(id){
+  const p=P.find(x=>x.id==id);
+  $("#sheet").innerHTML=`<button class="close" id="x">Cerrar</button>
+  <div class="sheet-head">${pack(p)}<div><h2 id="d-name">${p.n} ${p.d}</h2><div>${p.pa} · ${p.pres}</div><span class="tag ${p.rx?"rx":"otc"}">${p.rx?"Requiere receta médica":"Venta libre"}</span></div></div>
+  <dl><dt>¿Para qué se usa?</dt><dd>${p.uso}</dd><dt>Cómo se toma</dt><dd>${p.como}</dd><dt>Advertencias principales</dt><dd>${p.adv}</dd></dl>
+  <div class="buy" id="buy"><div><b style="font-size:22px">${money(p.pr)}</b>${p.rx?`<br><span class="muted">Necesitarás enviar tu receta al pedirlo</span>`:""}</div><button class="btn" id="add">Agregar al pedido</button></div>
+  <p class="note">Esta información es orientativa y no sustituye la consulta con un médico o farmacéutico. Lee siempre el prospecto de tu presentación.</p>`;
+  $("#dlg").showModal();$("#x").onclick=()=>$("#dlg").close();$("#add").onclick=()=>add(p.id);
+}
+const sug=$("#sug"),q=$("#q");
+q.addEventListener("input",()=>{
+  st.q=q.value;list();
+  const r=q.value.trim()?P.filter(p=>match(p,q.value)).slice(0,5):[];
+  sug.innerHTML=r.map(p=>`<li><button data-id="${p.id}"><span>${p.n} ${p.d}</span><small>${p.cat}</small></button></li>`).join("");
+  sug.hidden=!r.length;q.setAttribute("aria-expanded",!!r.length);
+});
+sug.addEventListener("click",e=>{const b=e.target.closest("button");if(b){sug.hidden=true;open(b.dataset.id)}});
+document.addEventListener("click",e=>{if(!e.target.closest(".search"))sug.hidden=true});
+q.addEventListener("keydown",e=>{if(e.key==="Escape")sug.hidden=true});
+$("#filters").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.cat)st.cat=b.dataset.cat;if(b.dataset.rx)st.rx=b.dataset.rx;filters();list()});
+$("#filters").addEventListener("change",e=>{if(e.target.id==="marca"){st.marca=e.target.value;list()}});
+$("#list").addEventListener("click",e=>{const b=e.target.closest(".row");if(b)open(b.dataset.id)});
+$("#dlg").addEventListener("click",e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
+
+/* Pedido */
+const WA="18095508839"; /* WhatsApp de la farmacia, con código de país */
+const cart={},info={tipo:"retiro"};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const count=()=>Object.values(cart).reduce((a,b)=>a+b,0);
+const total=()=>Object.entries(cart).reduce((a,[id,q])=>a+P.find(p=>p.id==id).pr*q,0);
+const badge=()=>{$("#cnt").textContent=count()};
+function add(id){
+  cart[id]=(cart[id]||0)+1;badge();
+  $("#buy").innerHTML=`<b>Agregado a tu pedido</b><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="chip" id="more">Seguir viendo</button><button class="btn" id="go">Ver mi pedido</button></div>`;
+  $("#more").onclick=()=>$("#dlg").close();
+  $("#go").onclick=()=>{$("#dlg").close();openCart()};
+}
+function openCart(){
+  const ids=Object.keys(cart),rx=ids.some(id=>P.find(p=>p.id==id).rx),dom=info.tipo==="domicilio";
+  $("#cart").innerHTML=`<button class="close" id="cx">Cerrar</button><h2 id="c-title">Mi pedido</h2>`+(ids.length?
+  `<ul class="list">${ids.map(id=>{const p=P.find(x=>x.id==id);return `<li class="citem"><div><b>${p.n} ${p.d}</b><br><span class="muted">${p.pres} · ${money(p.pr)}</span></div><div class="qty"><button aria-label="Quitar uno de ${p.n}" data-q="-1" data-id="${id}">−</button><span>${cart[id]}</span><button aria-label="Agregar uno de ${p.n}" data-q="1" data-id="${id}">+</button></div></li>`}).join("")}</ul>
+  <p class="tot"><span>Total</span><b>${money(total())}</b></p>
+  ${rx?`<p class="note rxnote">Tu pedido incluye medicamentos con receta. Envía una foto legible de la receta por WhatsApp junto con el pedido; sin ella no podemos entregarlos.</p>`:""}
+  <form id="oform"><label>Nombre<input name="nombre" required autocomplete="name" value="${esc(info.nombre||"")}"></label>
+  <label>Teléfono<input name="tel" type="tel" required autocomplete="tel" value="${esc(info.tel||"")}"></label>
+  <fieldset><legend>¿Cómo lo recibes?</legend><label><input type="radio" name="tipo" value="retiro" ${dom?"":"checked"}> Retiro en tienda</label><label><input type="radio" name="tipo" value="domicilio" ${dom?"checked":""}> Entrega a domicilio</label></fieldset>
+  <label id="dir" ${dom?"":"hidden"}>Dirección de entrega<input name="dir" ${dom?"required":""} value="${esc(info.dir||"")}"></label>
+  <button class="btn" type="submit">Pedir ahora</button></form>`
+  :`<p class="empty">Tu pedido está vacío. Abre un medicamento y toca “Agregar al pedido”.</p><button class="btn" id="cx2">Ver catálogo</button>`);
+  if(!$("#cdlg").open)$("#cdlg").showModal();
+}
+$("#cartbtn").onclick=openCart;
+$("#cart").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id==="cx"||b.id==="cx2"||b.id==="cx3")$("#cdlg").close();
+  if(b.dataset.q){const id=b.dataset.id;cart[id]+=+b.dataset.q;if(cart[id]<1)delete cart[id];badge();openCart()}
+});
+$("#cart").addEventListener("input",e=>{if(e.target.name)info[e.target.name]=e.target.value});
+$("#cart").addEventListener("change",e=>{if(e.target.name==="tipo"){const d=e.target.value==="domicilio";$("#dir").hidden=!d;$("#dir input").required=d}});
+$("#cart").addEventListener("submit",e=>{
+  e.preventDefault();
+  const ids=Object.keys(cart),rx=ids.some(id=>P.find(p=>p.id==id).rx);
+  const lines=ids.map(id=>{const p=P.find(x=>x.id==id);return `• ${cart[id]} × ${p.n} ${p.d} (${p.pres}) - ${money(p.pr*cart[id])}`});
+  const msg=`Hola, quiero hacer un pedido en Farmacia Alameda:\n${lines.join("\n")}\nTotal: ${money(total())}\nNombre: ${info.nombre}\nTeléfono: ${info.tel}\n`+(info.tipo==="domicilio"?"Entrega a domicilio: "+info.dir:"Retiro en tienda")+(rx?"\nTe envío la receta de los medicamentos que la requieren.":"");
+  const url="https://wa.me/"+WA+"?text="+encodeURIComponent(msg);
+  window.open(url,"_blank","noopener");
+  $("#cart").innerHTML=`<button class="close" id="cx3">Cerrar</button><h2 id="c-title">Pedido listo para enviar</h2><p>Se abrió WhatsApp con tu pedido. Envía el mensaje para confirmarlo${rx?" y adjunta la foto de tu receta":""}. Te responderemos con la disponibilidad y el tiempo de entrega.</p><p class="muted">¿No se abrió? <a href="${url}" target="_blank" rel="noopener">Abrir WhatsApp</a></p>`;
+  Object.keys(cart).forEach(k=>delete cart[k]);badge();
+});
+filters();list();
+</script>
+</body>
+</html>
